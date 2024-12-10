@@ -3,14 +3,12 @@ package com.andrew.danceconnect.DanceConnect.controllers;
 import com.andrew.danceconnect.DanceConnect.dto.UserDTO;
 import com.andrew.danceconnect.DanceConnect.models.User;
 import com.andrew.danceconnect.DanceConnect.services.UserService;
+import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +18,12 @@ import java.util.List;
 public class UsersController {
 
     private final UserService userService;
+    private final CheckingBindingResult checkingBindingResult;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, CheckingBindingResult checkingBindingResult) {
         this.userService = userService;
+        this.checkingBindingResult = checkingBindingResult;
     }
 
     @GetMapping()
@@ -32,25 +32,12 @@ public class UsersController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO,
+    public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid UserDTO userDTO,
                                               BindingResult bindingResult) {
         User user = userService.convertDTOToUser(userDTO);
         // ЕСли есть ошибки валидации
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorsMsg = new StringBuilder();
-
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors) {
-                errorsMsg.append(fieldError.getField())
-                        .append(": ")
-                        .append(fieldError.getDefaultMessage())
-                        .append("\n");
-            }
-
-            // Ошибки с подробным сообщением
-            throw new ValidationException(errorsMsg.toString());
-        }
+        checkingBindingResult.checkBindingResult(bindingResult);
         userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 }

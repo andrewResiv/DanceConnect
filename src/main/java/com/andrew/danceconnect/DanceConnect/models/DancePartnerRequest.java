@@ -1,5 +1,6 @@
 package com.andrew.danceconnect.DanceConnect.models;
 
+import com.andrew.danceconnect.DanceConnect.enums.LevelOfDancing;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -18,9 +19,11 @@ public class DancePartnerRequest {
     private User user;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private String danceStyle;
 
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Enum<LevelOfDancing> level;
 
     private String location;
 

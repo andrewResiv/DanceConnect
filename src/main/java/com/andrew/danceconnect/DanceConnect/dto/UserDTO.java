@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long id;
     private String username;
     private String email;
     private String password;
@@ -18,5 +19,5 @@ public class UserDTO {
     private String profilePicture;
     private String bio;
     private String location;
-
+    private BigDecimal rating;
 }

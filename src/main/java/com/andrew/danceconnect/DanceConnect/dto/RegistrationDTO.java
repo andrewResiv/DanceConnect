@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistrationDTO {
-    private Long id;
     private Long userId;
     private Long eventId;
     private String registrationDate;
