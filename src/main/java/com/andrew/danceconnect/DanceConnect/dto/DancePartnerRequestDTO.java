@@ -1,22 +1,20 @@
 package com.andrew.danceconnect.DanceConnect.dto;
 
 import com.andrew.danceconnect.DanceConnect.enums.DanceStyle;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.andrew.danceconnect.DanceConnect.enums.LevelOfDancing;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DancePartnerRequestDTO {
-    private Long userId;
-
-    @Enumerated(EnumType.STRING)
-    private Enum<DanceStyle> danceStyle;
-
-    private String location;
-    private String description;
-    private Boolean isActive;  // Статус заявки: активная или завершена
+    private Long userId; // ID пользователя, создавшего запрос
+    private DanceStyle danceStyle; // Стиль танца
+    private LevelOfDancing level; // Уровень танцевания
+    private String location; // Локация
+    private String description; // Описание запроса
 }

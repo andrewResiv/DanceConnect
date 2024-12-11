@@ -58,4 +58,14 @@ public class User {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> receivedMessages;
+
+    public void addDancePartnerRequest(DancePartnerRequest request) {
+        dancePartnerRequests.add(request);
+        request.setUser(this);  // Обязательно устанавливаем связь с пользователем
+    }
+
+    public void removeDancePartnerRequest(DancePartnerRequest request) {
+        dancePartnerRequests.remove(request);
+        request.setUser(null);  // Обнуляем связь с пользователем
+    }
 }

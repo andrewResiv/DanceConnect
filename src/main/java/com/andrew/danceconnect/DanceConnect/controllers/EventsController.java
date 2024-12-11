@@ -2,6 +2,7 @@ package com.andrew.danceconnect.DanceConnect.controllers;
 
 import com.andrew.danceconnect.DanceConnect.dto.EventDTO;
 import com.andrew.danceconnect.DanceConnect.services.EventService;
+import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,17 +12,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult.checkBindingResult;
 
 @RestController
 @RequestMapping("/events")
 public class EventsController {
 
     private final EventService eventService;
+    private final CheckingBindingResult checkingBindingResult;
 
     @Autowired
-    public EventsController(EventService eventService) {
+    public EventsController(EventService eventService, CheckingBindingResult checkingBindingResult) {
         this.eventService = eventService;
+        this.checkingBindingResult = checkingBindingResult;
     }
 
     @GetMapping()
@@ -38,7 +40,7 @@ public class EventsController {
     public ResponseEntity<HttpStatus> createEvent(@RequestBody @Valid EventDTO eventDTO,
                                                   BindingResult bindingResult) {
         // ЕСли есть ошибки валидации
-        checkBindingResult(bindingResult);
+        checkingBindingResult.checkBindingResult(bindingResult);
         //Преобразуем в entity и сохраним событие
         eventService.createEvent(eventService.convertToEntity(eventDTO));
 

@@ -1,5 +1,6 @@
 package com.andrew.danceconnect.DanceConnect.models;
 
+import com.andrew.danceconnect.DanceConnect.enums.DanceStyle;
 import com.andrew.danceconnect.DanceConnect.enums.LevelOfDancing;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,10 +21,11 @@ public class DancePartnerRequest {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String danceStyle;
+    private DanceStyle danceStyle;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Enum<LevelOfDancing> level;
+    private LevelOfDancing level;
 
     private String location;
 
@@ -31,4 +33,5 @@ public class DancePartnerRequest {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
 }

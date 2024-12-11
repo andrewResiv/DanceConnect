@@ -4,12 +4,14 @@ import com.andrew.danceconnect.DanceConnect.dto.UserDTO;
 
 import com.andrew.danceconnect.DanceConnect.models.User;
 import com.andrew.danceconnect.DanceConnect.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,16 @@ public class UserService {
                 .map(this::convertUserToDTO)
                 .collect(Collectors.toList());
 
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+    }
+
+    @Transactional
+    public void save(User user){
+        userRepository.save(user);
     }
 
     @Transactional
