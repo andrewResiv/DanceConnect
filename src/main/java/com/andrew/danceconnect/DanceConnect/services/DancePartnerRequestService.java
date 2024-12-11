@@ -70,23 +70,19 @@ public class DancePartnerRequestService {
     }
 
     public DancePartnerRequestDTO convertToDTO(DancePartnerRequest dancePartnerRequest) {
-        System.out.println("convertToDTO");
         DancePartnerRequestDTO dto = modelMapper.map(dancePartnerRequest, DancePartnerRequestDTO.class);
-        System.out.println("convertToDTO");
         // Если хотите передать больше информации о пользователе, можете добавить это вручную:
         User user = dancePartnerRequest.getUser();
         if (user != null) {
             dto.setUserId(user.getId()); // Заполняем только userId, если хотите оставить только ID
-            // или же можно добавить дополнительные поля, например:
-            // dto.setUserName(user.getUsername());
-            // dto.setUserEmail(user.getEmail());
         }
-        System.out.println("convertToDTO");
         return dto;
     }
 
     public DancePartnerRequest convertToEntity(DancePartnerRequestDTO dancePartnerRequestDTO) {
-        System.out.println("convertToEntity");
-        return modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
+        DancePartnerRequest dancePartnerRequest =modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
+        User user = userService.getUser(dancePartnerRequestDTO.getUserId());
+        dancePartnerRequest.setUser(user);
+        return dancePartnerRequest;
     }
 }
