@@ -1,0 +1,19 @@
+version: "3.8"
+name: dance-connect
+
+services:
+  dance-connect-postgres:
+    container_name: dance-connect-postgres
+    image: postgres:15.2-alpine
+    volumes:
+      - postgres-db:/data/postgres
+    environment:
+      POSTGRES_DB: dance_connect
+      POSTGRES_PORT: 5432
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-db:
+    name: dance_connect

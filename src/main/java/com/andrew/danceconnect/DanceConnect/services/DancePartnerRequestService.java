@@ -5,6 +5,7 @@ import com.andrew.danceconnect.DanceConnect.models.DancePartnerRequest;
 import com.andrew.danceconnect.DanceConnect.models.User;
 import com.andrew.danceconnect.DanceConnect.repositories.DancePartnerRequestRepository;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class DancePartnerRequestService {
 
     private final DancePartnerRequestRepository dancePartnerRequestRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
-
-    @Autowired
-    public DancePartnerRequestService(DancePartnerRequestRepository dancePartnerRequestRepository, ModelMapper modelMapper, UserService userService, EntityManager entityManager) {
-        this.dancePartnerRequestRepository = dancePartnerRequestRepository;
-        this.modelMapper = modelMapper;
-        this.userService = userService;
-    }
 
     public List<DancePartnerRequestDTO> getDancePartnerRequests() {
         return dancePartnerRequestRepository.findAll().stream()
@@ -46,9 +41,6 @@ public class DancePartnerRequestService {
         if (!user.getDancePartnerRequests().contains(request)) {
             user.addDancePartnerRequest(request);
         }
-
-        // Сохраняем пользователя, что также сохранит связанные запросы
-        userService.save(user);
     }
 
     public DancePartnerRequestDTO getDancePartnerRequest(Long id) {

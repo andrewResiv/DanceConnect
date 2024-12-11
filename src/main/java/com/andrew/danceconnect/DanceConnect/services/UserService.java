@@ -38,11 +38,6 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user){
-        userRepository.save(user);
-    }
-
-    @Transactional
     public UserDTO createUser(User user) {
         return convertUserToDTO(userRepository.save(user));
     }

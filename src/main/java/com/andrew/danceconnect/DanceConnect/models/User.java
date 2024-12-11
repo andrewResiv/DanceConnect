@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "Users")
 public class User {
