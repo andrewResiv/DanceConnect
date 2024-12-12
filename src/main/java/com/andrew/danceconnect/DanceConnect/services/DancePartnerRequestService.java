@@ -4,9 +4,8 @@ import com.andrew.danceconnect.DanceConnect.dto.DancePartnerRequestDTO;
 import com.andrew.danceconnect.DanceConnect.models.DancePartnerRequest;
 import com.andrew.danceconnect.DanceConnect.models.User;
 import com.andrew.danceconnect.DanceConnect.repositories.DancePartnerRequestRepository;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,18 +14,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class DancePartnerRequestService {
 
     private final DancePartnerRequestRepository dancePartnerRequestRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
-
-    @Autowired
-    public DancePartnerRequestService(DancePartnerRequestRepository dancePartnerRequestRepository, ModelMapper modelMapper, UserService userService, EntityManager entityManager) {
-        this.dancePartnerRequestRepository = dancePartnerRequestRepository;
-        this.modelMapper = modelMapper;
-        this.userService = userService;
-    }
 
     public List<DancePartnerRequestDTO> getDancePartnerRequests() {
         return dancePartnerRequestRepository.findAll().stream()
@@ -43,12 +36,7 @@ public class DancePartnerRequestService {
         DancePartnerRequest request = convertToEntity(dancePartnerRequestDTO);
 
         // Добавляем запрос к пользователю, если он еще не добавлен
-        if (!user.getDancePartnerRequests().contains(request)) {
-            user.addDancePartnerRequest(request);
-        }
-
-        // Сохраняем пользователя, что также сохранит связанные запросы
-        userService.save(user);
+        user.addDancePartnerRequest(request);
     }
 
     public DancePartnerRequestDTO getDancePartnerRequest(Long id) {
@@ -80,9 +68,11 @@ public class DancePartnerRequestService {
     }
 
     public DancePartnerRequest convertToEntity(DancePartnerRequestDTO dancePartnerRequestDTO) {
-        DancePartnerRequest dancePartnerRequest =modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
+        DancePartnerRequest dancePartnerRequest = modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
         User user = userService.getUser(dancePartnerRequestDTO.getUserId());
         dancePartnerRequest.setUser(user);
+        dancePartnerRequest.setId(null);
+
         return dancePartnerRequest;
     }
 }

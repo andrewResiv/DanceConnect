@@ -3,10 +3,13 @@ package com.andrew.danceconnect.DanceConnect.models;
 import com.andrew.danceconnect.DanceConnect.enums.DanceStyle;
 import com.andrew.danceconnect.DanceConnect.enums.LevelOfDancing;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "dance_partner_requests")
 public class DancePartnerRequest {
