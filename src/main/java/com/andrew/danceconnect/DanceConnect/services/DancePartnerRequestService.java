@@ -4,10 +4,8 @@ import com.andrew.danceconnect.DanceConnect.dto.DancePartnerRequestDTO;
 import com.andrew.danceconnect.DanceConnect.models.DancePartnerRequest;
 import com.andrew.danceconnect.DanceConnect.models.User;
 import com.andrew.danceconnect.DanceConnect.repositories.DancePartnerRequestRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +36,7 @@ public class DancePartnerRequestService {
         DancePartnerRequest request = convertToEntity(dancePartnerRequestDTO);
 
         // Добавляем запрос к пользователю, если он еще не добавлен
-        if (!user.getDancePartnerRequests().contains(request)) {
-            user.addDancePartnerRequest(request);
-        }
+        user.addDancePartnerRequest(request);
     }
 
     public DancePartnerRequestDTO getDancePartnerRequest(Long id) {
@@ -72,9 +68,11 @@ public class DancePartnerRequestService {
     }
 
     public DancePartnerRequest convertToEntity(DancePartnerRequestDTO dancePartnerRequestDTO) {
-        DancePartnerRequest dancePartnerRequest =modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
+        DancePartnerRequest dancePartnerRequest = modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
         User user = userService.getUser(dancePartnerRequestDTO.getUserId());
         dancePartnerRequest.setUser(user);
+        dancePartnerRequest.setId(null);
+
         return dancePartnerRequest;
     }
 }

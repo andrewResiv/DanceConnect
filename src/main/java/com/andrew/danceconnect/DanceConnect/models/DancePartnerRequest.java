@@ -3,7 +3,6 @@ package com.andrew.danceconnect.DanceConnect.models;
 import com.andrew.danceconnect.DanceConnect.enums.DanceStyle;
 import com.andrew.danceconnect.DanceConnect.enums.LevelOfDancing;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
