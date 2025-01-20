@@ -10,4 +10,5 @@ import java.util.List;
 public interface DancePartnerRequestRepository extends JpaRepository<DancePartnerRequest, Long> {
     List<DancePartnerRequest> findByDanceStyleAndLocation(String danceStyle, String location);
     List<DancePartnerRequest> findByUserId(Long userId);
+    List<DancePartnerRequest> findByPartnerIsNull();
 }

@@ -32,7 +32,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    @Size(min = 1, max = 255, message = "username should be greater than 1 and less than 255")
+    @Size(min = 1, max = 255, message = "password should be greater than 1 and less than 255")
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -50,10 +50,13 @@ public class User {
 
     @Column(precision = 3, scale = 2)
     private BigDecimal rating = BigDecimal.ZERO;
-
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DancePartnerRequest> dancePartnerRequests;
+    private List<DancePartnerRequest> dancePartnerRequests; // Запросы, созданные пользователем
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<DancePartnerRequest> partneredRequests; // Запросы, где пользователь является партнером
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> createdEvents;

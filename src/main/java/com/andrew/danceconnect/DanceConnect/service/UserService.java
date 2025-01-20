@@ -27,9 +27,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+    public UserDTO getUser(Long id) {
+        return convertUserToDTO(userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found")));
+    }
+
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
     }
 
     @Transactional

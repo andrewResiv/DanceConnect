@@ -27,6 +27,10 @@ public class UsersController {
         return userService.getUsers();
     }
 
+    @GetMapping("/{id}")
+    public UserDTO getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
     @PostMapping("/registration")
     public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid UserDTO userDTO,
                                               BindingResult bindingResult) {
@@ -36,4 +40,5 @@ public class UsersController {
         userService.createUser(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
+
 }

@@ -30,7 +30,7 @@ public class DancePartnerRequestService {
     @Transactional
     public void createRequest(DancePartnerRequestDTO dancePartnerRequestDTO) {
         Long userId = dancePartnerRequestDTO.getUserId();
-        User user = userService.getUser(userId);  // Получаем пользователя (управляемую сущность)
+        User user = userService.findUserById(userId);  // Получаем пользователя (управляемую сущность)
 
         // Преобразуем DTO в сущность
         DancePartnerRequest request = convertToEntity(dancePartnerRequestDTO);
@@ -67,9 +67,19 @@ public class DancePartnerRequestService {
         return dto;
     }
 
+    public void assignPartner(Long requestId, Long partnerId) {
+        DancePartnerRequest request = dancePartnerRequestRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
+        User partner = userService.findUserById(partnerId);
+
+        request.setPartner(partner);
+        dancePartnerRequestRepository.save(request);
+    }
+
     public DancePartnerRequest convertToEntity(DancePartnerRequestDTO dancePartnerRequestDTO) {
         DancePartnerRequest dancePartnerRequest = modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
-        User user = userService.getUser(dancePartnerRequestDTO.getUserId());
+        User user = userService.findUserById(dancePartnerRequestDTO.getUserId());
         dancePartnerRequest.setUser(user);
         dancePartnerRequest.setId(null);
 

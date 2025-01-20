@@ -22,6 +22,10 @@ public class DancePartnerRequest {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    private User partner; // Партнер, найденный для танцев
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DanceStyle danceStyle;

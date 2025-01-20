@@ -6,7 +6,6 @@ import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,8 +16,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/requests")
-public class DancePartnerRequestsControllers{
+@RequestMapping("/dance/requests")
+public class DancePartnerRequestsController {
 
     private final DancePartnerRequestService dancePartnerRequestService;
 
