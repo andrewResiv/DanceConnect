@@ -39,6 +39,13 @@ public class DancePartnerRequestsController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}/assignPartner")
+    public ResponseEntity<HttpStatus> assignPartner(@PathVariable Long id,
+                                                    @RequestBody @Valid DancePartnerRequestDTO dancePartnerRequestDTO) {
+        dancePartnerRequestService.assignPartner(dancePartnerRequestDTO, id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> updateRequest(@PathVariable Long id,
                                                     DancePartnerRequestDTO dancePartnerRequestDTO) {

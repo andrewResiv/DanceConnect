@@ -57,26 +57,23 @@ public class DancePartnerRequestService {
         dancePartnerRequestRepository.deleteById(id);
     }
 
+    @Transactional
+    public void assignPartner(DancePartnerRequestDTO requestDTO, Long partnerId) {
+        DancePartnerRequest request = convertToEntity(requestDTO);
+        request.setPartner( userService.findUserById(partnerId));
+        dancePartnerRequestRepository.save(request);
+    }
+
+    //Преобразование из Entity в DTO
     public DancePartnerRequestDTO convertToDTO(DancePartnerRequest dancePartnerRequest) {
         DancePartnerRequestDTO dto = modelMapper.map(dancePartnerRequest, DancePartnerRequestDTO.class);
-        // Если хотите передать больше информации о пользователе, можете добавить это вручную:
         User user = dancePartnerRequest.getUser();
         if (user != null) {
             dto.setUserId(user.getId()); // Заполняем только userId, если хотите оставить только ID
         }
         return dto;
     }
-
-    public void assignPartner(Long requestId, Long partnerId) {
-        DancePartnerRequest request = dancePartnerRequestRepository.findById(requestId)
-                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
-
-        User partner = userService.findUserById(partnerId);
-
-        request.setPartner(partner);
-        dancePartnerRequestRepository.save(request);
-    }
-
+    //Преобразование из DTO в Entity
     public DancePartnerRequest convertToEntity(DancePartnerRequestDTO dancePartnerRequestDTO) {
         DancePartnerRequest dancePartnerRequest = modelMapper.map(dancePartnerRequestDTO, DancePartnerRequest.class);
         User user = userService.findUserById(dancePartnerRequestDTO.getUserId());
