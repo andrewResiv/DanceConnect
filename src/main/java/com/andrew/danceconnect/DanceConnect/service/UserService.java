@@ -8,10 +8,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,10 +24,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public List<UserDTO> getUsers() {
-        return userRepository.findAll().stream()
-                .map(this::convertUserToDTO)
-                .collect(Collectors.toList());
+    public Page<UserDTO> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::convertUserToDTO);
     }
 
     public UserDTO getUser(Long id) {

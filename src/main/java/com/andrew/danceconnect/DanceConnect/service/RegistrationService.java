@@ -29,9 +29,7 @@ public class RegistrationService {
     @Transactional
     public Registration registerUserOnEvent(UserDTO userDTO, Event event) {
         User user = userService.convertDTOToUser(userDTO);
-        if (registrationRepository.existsByUserAndEvent(user, event)) {
-            throw new IllegalStateException("User is already registered for the event.");
-        }
+        checkIfUserAlreadyRegistered(user, event);
         Registration registration = Registration.builder()
                 .user(user)
                 .event(event)
@@ -39,6 +37,11 @@ public class RegistrationService {
         return registrationRepository.save(registration);
     }
 
+    private void checkIfUserAlreadyRegistered(User user, Event event) {
+        if (registrationRepository.existsByUserAndEvent(user, event)) {
+            throw new IllegalStateException("User is already registered for the event.");
+        }
+    }
     @Transactional
     public void unregisterUserFromEvent(User user, Event event) {
         Registration registration = registrationRepository.findByUserAndEvent(user, event)

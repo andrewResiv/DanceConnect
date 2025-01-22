@@ -10,5 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    //TODO
+
+
+    public Double getAverageRating(Long revieweeId) {
+        return reviewRepository.findAverageRatingByRevieweeId(revieweeId);
+    }
+
 }

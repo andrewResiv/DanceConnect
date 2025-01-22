@@ -7,6 +7,9 @@ import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,9 +25,11 @@ public class UsersController {
     private final UserService userService;
     private final CheckingBindingResult checkingBindingResult;
 
-    @GetMapping()
-    public List<UserDTO> getUsers() {
-        return userService.getUsers();
+    @GetMapping
+    public Page<UserDTO> getUsers(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userService.getUsers(pageable);
     }
 
     @GetMapping("/{id}")

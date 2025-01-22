@@ -2,14 +2,12 @@ package com.andrew.danceconnect.DanceConnect.controller;
 
 import com.andrew.danceconnect.DanceConnect.model.dto.EventDTO;
 import com.andrew.danceconnect.DanceConnect.model.dto.UserDTO;
-import com.andrew.danceconnect.DanceConnect.model.entity.Event;
 import com.andrew.danceconnect.DanceConnect.service.EventService;
 import com.andrew.danceconnect.DanceConnect.service.RegistrationService;
 import com.andrew.danceconnect.DanceConnect.service.UserService;
 import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -44,9 +42,8 @@ public class EventsController {
                                                   BindingResult bindingResult) {
         // ЕСли есть ошибки валидации
         checkingBindingResult.checkBindingResult(bindingResult);
-        //Преобразуем в entity и сохраним событие
-        eventService.createEvent(eventService.convertToEntity(eventDTO));
-
+        //Сохраним событие
+        eventService.createEvent(eventDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 

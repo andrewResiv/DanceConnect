@@ -4,6 +4,7 @@ import com.andrew.danceconnect.DanceConnect.model.dto.DancePartnerRequestDTO;
 import com.andrew.danceconnect.DanceConnect.model.entity.DancePartnerRequest;
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
 import com.andrew.danceconnect.DanceConnect.repository.DancePartnerRequestRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,9 @@ public class DancePartnerRequestService {
 
     @Transactional
     public void assignPartner(DancePartnerRequestDTO requestDTO, Long partnerId) {
+        if (userService.findUserById(partnerId) == null) {
+            throw new EntityNotFoundException("User with id " + partnerId + " not found");
+        }
         DancePartnerRequest request = convertToEntity(requestDTO);
         request.setPartner( userService.findUserById(partnerId));
         dancePartnerRequestRepository.save(request);
