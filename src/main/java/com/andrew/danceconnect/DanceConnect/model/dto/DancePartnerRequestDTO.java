@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DancePartnerRequestDTO {
     private Long userId; // ID пользователя, создавшего запрос
     private DanceStyle danceStyle; // Стиль танца
-    private LevelOfDancing level; // Уровень танцевания
+    private LevelOfDancing level; // Уровень танца
     private String location; // Локация
     private String description; // Описание запроса
 }

@@ -41,9 +41,11 @@ public class UsersController {
                                               BindingResult bindingResult) {
         User user = userService.convertDTOToUser(userDTO);
         // ЕСли есть ошибки валидации
-        checkingBindingResult.checkBindingResult(bindingResult);
+        CheckingBindingResult.checkBindingResult(bindingResult);
         userService.createUser(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
+
+
 
 }

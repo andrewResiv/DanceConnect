@@ -10,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +28,9 @@ public class EventService {
     private final UserService userService;
     private final EntityManager entityManager;
 
-    public List<EventDTO> getAllEvents(){
-        return eventRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<EventDTO> getAllEvents(Pageable pageable) {
+        return eventRepository.findAll(pageable)
+                .map(this::convertToDTO);
     }
 
     public EventDTO getEventById(Long id){

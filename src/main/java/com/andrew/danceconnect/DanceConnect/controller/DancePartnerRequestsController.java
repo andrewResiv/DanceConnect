@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dance/requests")
+@RequestMapping("/dance-partner-requests")
 public class DancePartnerRequestsController {
 
     private final DancePartnerRequestService dancePartnerRequestService;

@@ -8,6 +8,9 @@ import com.andrew.danceconnect.DanceConnect.service.UserService;
 import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -28,8 +31,10 @@ public class EventsController {
 
 
     @GetMapping()
-    public List<EventDTO> getAllEvents() {
-        return eventService.getAllEvents();
+    public Page<EventDTO> getAllEvents(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventService.getAllEvents(pageable);
     }
 
     @GetMapping("/{id}")
