@@ -27,9 +27,6 @@ public class UserDTO {
     private String firstName;
     private String lastName;
 
-    @NotNull(message = "Role is required")
-    private String role;
-
     private String profilePicture;
     private String bio;
     private String location;

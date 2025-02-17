@@ -10,6 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
@@ -43,6 +46,17 @@ public class UserService {
         return convertUserToDTO(userRepository.save(user));
     }
 
+    @Transactional
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            modelMapper.map(userDTO, existingUser);
+            return convertUserToDTO(existingUser);
+        }else{
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
+    }
     public UserDTO convertUserToDTO(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
@@ -50,5 +64,10 @@ public class UserService {
         return modelMapper.map(userDTO, User.class);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
 }

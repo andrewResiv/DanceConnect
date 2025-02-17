@@ -23,7 +23,6 @@ import java.util.List;
 public class UsersController {
 
     private final UserService userService;
-    private final CheckingBindingResult checkingBindingResult;
 
     @GetMapping
     public Page<UserDTO> getUsers(@RequestParam(defaultValue = "0") int page,
@@ -46,6 +45,9 @@ public class UsersController {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-
-
+    @PatchMapping("/{id}")
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(HttpStatus.CREATED);
+    }
 }
