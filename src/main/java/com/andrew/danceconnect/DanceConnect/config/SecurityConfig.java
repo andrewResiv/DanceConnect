@@ -34,6 +34,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Без сессий
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/register", "/auth/login").permitAll() // Открытые эндпоинты
+                    .requestMatchers("/users/**").hasRole("ADMIN") // Доступ к `/admin/**` только для админов
+                    .requestMatchers("/events/**").hasAnyRole("USER", "ADMIN") // Доступ к `/user/**` для обычных пользователей и админов
                     .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider()) // Настроенный провайдер

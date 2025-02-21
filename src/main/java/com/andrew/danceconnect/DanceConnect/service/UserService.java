@@ -2,8 +2,10 @@ package com.andrew.danceconnect.DanceConnect.service;
 
 import com.andrew.danceconnect.DanceConnect.model.dto.UserDTO;
 
+import com.andrew.danceconnect.DanceConnect.model.entity.Role;
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
 import com.andrew.danceconnect.DanceConnect.repository.UserRepository;
+import com.andrew.danceconnect.DanceConnect.security.CustomUserDetails;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -66,8 +68,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            return new CustomUserDetails(userOptional.get());
+        }
+        throw new UsernameNotFoundException("Username " + username + " not found");
     }
-
 }

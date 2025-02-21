@@ -1,10 +1,11 @@
 package com.andrew.danceconnect.DanceConnect.controller;
 
-import com.andrew.danceconnect.DanceConnect.model.constant.Role;
 import com.andrew.danceconnect.DanceConnect.model.dto.AuthRequest;
 import com.andrew.danceconnect.DanceConnect.model.dto.AuthResponse;
 import com.andrew.danceconnect.DanceConnect.model.dto.UserDTO;
+import com.andrew.danceconnect.DanceConnect.model.entity.Role;
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
+import com.andrew.danceconnect.DanceConnect.repository.RoleRepository;
 import com.andrew.danceconnect.DanceConnect.repository.UserRepository;
 import com.andrew.danceconnect.DanceConnect.service.JwtService;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RoleRepository roleRepository;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid UserDTO userDTO) {
@@ -36,7 +38,10 @@ public class AuthController {
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setRole(Role.ROLE_USER);
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+
+        user.getRoles().add(userRole);
 
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
