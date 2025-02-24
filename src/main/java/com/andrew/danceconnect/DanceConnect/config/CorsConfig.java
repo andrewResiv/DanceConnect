@@ -1,10 +1,10 @@
 package com.andrew.danceconnect.DanceConnect.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+//Конфиг для работы с frontend
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     @Override
