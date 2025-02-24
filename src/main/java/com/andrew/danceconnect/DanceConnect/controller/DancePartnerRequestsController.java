@@ -2,13 +2,11 @@ package com.andrew.danceconnect.DanceConnect.controller;
 
 import com.andrew.danceconnect.DanceConnect.model.dto.DancePartnerRequestDTO;
 import com.andrew.danceconnect.DanceConnect.service.DancePartnerRequestService;
-import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +30,7 @@ public class DancePartnerRequestsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<HttpStatus> addRequest(@RequestBody @Valid DancePartnerRequestDTO dancePartnerRequestDTO,
-                                                 BindingResult bindingResult) {
-        CheckingBindingResult.checkBindingResult(bindingResult);
+    public ResponseEntity<HttpStatus> addRequest(@RequestBody @Valid DancePartnerRequestDTO dancePartnerRequestDTO) {
         dancePartnerRequestService.createRequest(dancePartnerRequestDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
@@ -43,6 +39,12 @@ public class DancePartnerRequestsController {
     public ResponseEntity<HttpStatus> assignPartner(@PathVariable Long id,
                                                     @RequestBody @Valid DancePartnerRequestDTO dancePartnerRequestDTO) {
         dancePartnerRequestService.assignPartner(dancePartnerRequestDTO, id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+    @PatchMapping("/{id}/unassignPartner")
+    public ResponseEntity<HttpStatus> unassignPartner(@PathVariable Long id,
+                                                    @RequestBody @Valid DancePartnerRequestDTO dancePartnerRequestDTO) {
+        dancePartnerRequestService.unassignPartner(dancePartnerRequestDTO, id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

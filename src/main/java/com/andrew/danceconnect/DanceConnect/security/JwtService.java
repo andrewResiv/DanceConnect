@@ -1,4 +1,4 @@
-package com.andrew.danceconnect.DanceConnect.service;
+package com.andrew.danceconnect.DanceConnect.security;
 
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
 import io.jsonwebtoken.Claims;
@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class JwtService {
                 .compact();
     }
 
+    @Nullable
     public String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }

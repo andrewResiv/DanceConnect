@@ -1,15 +1,12 @@
 package com.andrew.danceconnect.DanceConnect.service;
 
 import com.andrew.danceconnect.DanceConnect.model.dto.UserDTO;
-
-import com.andrew.danceconnect.DanceConnect.model.entity.Role;
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
 import com.andrew.danceconnect.DanceConnect.repository.UserRepository;
 import com.andrew.danceconnect.DanceConnect.security.CustomUserDetails;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,21 +38,22 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDTO createUser(User user) {
-        return convertUserToDTO(userRepository.save(user));
-    }
-
-    @Transactional
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
+    public void updateUser(Long id, UserDTO userDTO) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
             modelMapper.map(userDTO, existingUser);
-            return convertUserToDTO(existingUser);
+            userRepository.save(existingUser);
         }else{
             throw new EntityNotFoundException("User with id " + id + " not found");
         }
     }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        userRepository.findById(id).ifPresent(userRepository::delete);
+    }
+
     public UserDTO convertUserToDTO(User user) {
         return modelMapper.map(user, UserDTO.class);
     }

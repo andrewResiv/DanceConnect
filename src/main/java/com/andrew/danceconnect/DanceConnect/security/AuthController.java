@@ -1,4 +1,4 @@
-package com.andrew.danceconnect.DanceConnect.controller;
+package com.andrew.danceconnect.DanceConnect.security;
 
 import com.andrew.danceconnect.DanceConnect.model.dto.AuthRequest;
 import com.andrew.danceconnect.DanceConnect.model.dto.AuthResponse;
@@ -7,7 +7,6 @@ import com.andrew.danceconnect.DanceConnect.model.entity.Role;
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
 import com.andrew.danceconnect.DanceConnect.repository.RoleRepository;
 import com.andrew.danceconnect.DanceConnect.repository.UserRepository;
-import com.andrew.danceconnect.DanceConnect.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

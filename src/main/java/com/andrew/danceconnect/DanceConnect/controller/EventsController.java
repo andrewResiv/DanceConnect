@@ -5,7 +5,6 @@ import com.andrew.danceconnect.DanceConnect.model.dto.UserDTO;
 import com.andrew.danceconnect.DanceConnect.service.EventService;
 import com.andrew.danceconnect.DanceConnect.service.RegistrationService;
 import com.andrew.danceconnect.DanceConnect.service.UserService;
-import com.andrew.danceconnect.DanceConnect.util.CheckingBindingResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,10 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -25,7 +21,6 @@ import java.util.List;
 public class EventsController {
 
     private final EventService eventService;
-    private final CheckingBindingResult checkingBindingResult;
     private final RegistrationService registrationService;
     private final UserService userService;
 
@@ -43,10 +38,7 @@ public class EventsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<HttpStatus> createEvent(@RequestBody @Valid EventDTO eventDTO,
-                                                  BindingResult bindingResult) {
-        // ЕСли есть ошибки валидации
-        checkingBindingResult.checkBindingResult(bindingResult);
+    public ResponseEntity<HttpStatus> createEvent(@RequestBody @Valid EventDTO eventDTO) {
         //Сохраним событие
         eventService.createEvent(eventDTO);
         return ResponseEntity.ok(HttpStatus.CREATED);

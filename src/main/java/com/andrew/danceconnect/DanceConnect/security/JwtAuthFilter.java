@@ -1,6 +1,5 @@
-package com.andrew.danceconnect.DanceConnect.util;
+package com.andrew.danceconnect.DanceConnect.security;
 
-import com.andrew.danceconnect.DanceConnect.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

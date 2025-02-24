@@ -1,5 +1,4 @@
-package com.andrew.danceconnect.DanceConnect.config;
-import com.andrew.danceconnect.DanceConnect.util.JwtAuthFilter;
+package com.andrew.danceconnect.DanceConnect.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,8 +33,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Без сессий
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/register", "/auth/login").permitAll() // Открытые эндпоинты
-                    .requestMatchers("/users/**").hasRole("ADMIN") // Доступ к `/admin/**` только для админов
-                    .requestMatchers("/events/**").hasAnyRole("USER", "ADMIN") // Доступ к `/user/**` для обычных пользователей и админов
+                    .requestMatchers("/users/**").hasRole("ADMIN") // Доступ к `/users/**` только для админов
+                    .requestMatchers("/events/**").hasAnyRole("USER", "ADMIN") // Доступ к `/events/**` для обычных пользователей и админов
                     .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider()) // Настроенный провайдер

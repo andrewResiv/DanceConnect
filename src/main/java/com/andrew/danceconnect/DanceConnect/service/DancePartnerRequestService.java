@@ -58,6 +58,7 @@ public class DancePartnerRequestService {
         dancePartnerRequestRepository.deleteById(id);
     }
 
+    //Ставим партнера для танцев
     @Transactional
     public void assignPartner(DancePartnerRequestDTO requestDTO, Long partnerId) {
         if (userService.findUserById(partnerId) == null) {
@@ -67,6 +68,18 @@ public class DancePartnerRequestService {
         request.setPartner( userService.findUserById(partnerId));
         dancePartnerRequestRepository.save(request);
     }
+
+    //Убираем от запроса партнера
+    @Transactional
+    public void unassignPartner(DancePartnerRequestDTO requestDTO, Long partnerId) {
+        if (userService.findUserById(partnerId) == null) {
+            throw new EntityNotFoundException("User with id " + partnerId + " not found");
+        }
+        DancePartnerRequest request = convertToEntity(requestDTO);
+        request.setPartner(null);
+        dancePartnerRequestRepository.save(request);
+    }
+
 
     //Преобразование из Entity в DTO
     public DancePartnerRequestDTO convertToDTO(DancePartnerRequest dancePartnerRequest) {
