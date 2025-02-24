@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -34,8 +35,8 @@ public class JwtService {
         return extractClaims(token).getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean validateToken(@Nullable String token, UserDetails userDetails) {
+        return Objects.equals(extractUsername(token), userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
