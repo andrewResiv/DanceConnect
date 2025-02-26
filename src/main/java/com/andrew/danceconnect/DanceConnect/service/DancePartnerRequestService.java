@@ -86,7 +86,7 @@ public class DancePartnerRequestService {
         DancePartnerRequestDTO dto = modelMapper.map(dancePartnerRequest, DancePartnerRequestDTO.class);
         User user = dancePartnerRequest.getUser();
         if (user != null) {
-            dto.setUserId(user.getId()); // Заполняем только userId, если хотите оставить только ID
+            dto.setUserId(user.getId()); // Заполняем только userId
         }
         return dto;
     }

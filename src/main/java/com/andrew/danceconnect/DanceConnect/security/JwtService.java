@@ -5,9 +5,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -22,28 +23,25 @@ public class JwtService {
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
     public String generateToken(User user) {
+        log.info("generate token");
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getId().toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 часов
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30 минут
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    @Nullable
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+    public boolean validateToken(Claims claims, UserDetails userDetails) {
+        Long userIdFromToken = Long.parseLong(claims.getSubject()); // Извлекаем ID из токена
+        Long userIdFromDetails = ((CustomUserDetails) userDetails).getUserId(); // Получаем ID из UserDetails
+
+        Date expiration = claims.getExpiration(); // Извлекаем дату истечения
+
+        return Objects.equals(userIdFromToken, userIdFromDetails) && expiration != null && expiration.after(new Date());
     }
 
-    public boolean validateToken(@Nullable String token, UserDetails userDetails) {
-        return Objects.equals(extractUsername(token), userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
-    }
-
-    private Claims extractClaims(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()

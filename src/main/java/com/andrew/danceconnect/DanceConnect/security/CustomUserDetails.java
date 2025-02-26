@@ -1,6 +1,9 @@
 package com.andrew.danceconnect.DanceConnect.security;
 
 import com.andrew.danceconnect.DanceConnect.model.entity.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,18 +11,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class CustomUserDetails implements UserDetails {
-    private final User user;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
+@Slf4j
+@Getter
+@RequiredArgsConstructor
+public class CustomUserDetails implements UserDetails {
+    // Получаем пользователя
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+    }
+
+
+    public Long getUserId(){
+        return user.getId();
     }
 
     @Override
@@ -51,5 +60,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
+
