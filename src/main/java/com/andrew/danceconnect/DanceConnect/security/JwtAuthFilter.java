@@ -28,8 +28,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws ServletException, IOException {
-
-        log.info("Start doFilterInternal");
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
@@ -38,17 +36,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
         String token = authHeader.substring(7);
-        log.info("JWT Token extracted: {}", token);
         try {
-
-            log.info("JWT Token extracted: {}", token);
             Claims claims = jwtService.extractClaims(token);
 
             if (claims != null && jwtService.validateToken(claims, userDetailsService.loadUserById(claims.getSubject()))) {
                 UserDetails userDetails = userDetailsService.loadUserById(claims.getSubject());
-
-                log.info("User details: {}", userDetails.getUsername());
-                log.info("User roles: {}", userDetails.getAuthorities().toString());
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
